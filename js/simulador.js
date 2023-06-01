@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const mensajes = {
         id: 1,
-        texto: "Esta página del sitio web es para mayores de edad. Si no cumples con este requisito, por favor no continúes en el mismo."
+        texto: "Esta página del sitio web es para mayores de edad. Si usted no lo es por favor no continúe en el sitio."
     }
 
     primeraEntrada = JSON.parse(sessionStorage.getItem("primeraEntrada"));
@@ -36,9 +36,26 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function mostrarAlerta(mensajes) {
-        alert(mensajes.texto);
+        Swal.fire(mensajes.texto);
     }
 
+    // Historial de préstamos/cotizaciones
+
+    let historial = JSON.parse(sessionStorage.getItem("historial")) || [];
+    
+    function actualizarHistorial() {
+    const historialLi = document.getElementById("listaHistorial");
+    historialLi.innerHTML = ""; // Limpiar el contenido anterior del historial
+
+    const historialLength = historial.length;
+    const startIndex = historialLength >= 4 ? historialLength - 4 : 0;
+
+    historial.slice(startIndex).forEach((item) => {
+    const itemLi = document.createElement("li");
+    itemLi.innerText = `Monto: ${item.monto}, Cuotas: ${item.cuotas}, Valor de la cuota: ${item.resultado}`;
+    historialLi.appendChild(itemLi);
+  });
+}
     //función para calcular el préstamo
     function pagoTotal(monto, cuotas) {
         const tasa = 0.02;
@@ -52,34 +69,68 @@ document.addEventListener("DOMContentLoaded", function () {
 
     calcular.addEventListener("click", function (event) {
         event.preventDefault();
-        
+
         //obtener datos de los input
         const prestamo = document.querySelector('input[name="tipoPrestamo"]:checked');
         const monto = document.querySelector("#monto").value;
         const cuotas = document.querySelector("#cuotas").value;
         const texto = document.querySelector("#resultado");
+
         if (prestamo && prestamo.value === "prestamo1") {
 
+            if ((cuotas <= 25 && cuotas > 0) && (monto>0)){
+                const resultado = pagoTotal(parseInt(monto), parseInt(cuotas));
+                texto.innerHTML = "Según los datos proporcionados, usted deberá pagar " + cuotas + " cuotas de " + resultado + " pesos.";
 
-            if (cuotas <= 25 && cuotas > 0) {
-                const resultado = pagoTotal(parseInt(monto), parseInt(cuotas));
-                texto.innerHTML = "Según los datos proporcionados, usted deberá pagar " + cuotas + " cuotas de " + resultado + " pesos.";
+                // Agregar al historial de préstamos/cotizaciones
+
+                historial.push({
+                    monto: parseInt(monto),
+                    cuotas: parseInt(cuotas),
+                    resultado
+                });
+                sessionStorage.setItem("historial", JSON.stringify(historial));
+                actualizarHistorial();
+                  
+
             } else {
-                texto.innerHTML = "El número de cuotas seleccionado debe encontrarse entre 1 y 25.";
+                texto.innerHTML = "El monto seleccionado debe ser mayor que cero y el número de cuotas debe encontrarse entre 1 y 25.";
             }
+
         } else if (prestamo && prestamo.value === "prestamo2") {
-            if (cuotas <= 50 && cuotas > 0) {
+            if ((cuotas <= 50 && cuotas > 0) && (monto>0)){
                 const resultado = pagoTotal(parseInt(monto), parseInt(cuotas));
                 texto.innerHTML = "Según los datos proporcionados, usted deberá pagar " + cuotas + " cuotas de " + resultado + " pesos.";
+
+                // Agregar al historial de préstamos/cotizaciones
+
+                historial.push({
+                    monto: parseInt(monto),
+                    cuotas: parseInt(cuotas),
+                    resultado
+                });
+                sessionStorage.setItem("historial", JSON.stringify(historial));
+                actualizarHistorial();
             } else {
-                texto.innerHTML = "El número de cuotas seleccionado debe encontrarse entre 1 y 50.";
+                texto.innerHTML = "El monto seleccionado debe ser mayor que cero y el número de cuotas debe encontrarse entre 1 y 50.";
             }
         } else if (prestamo && prestamo.value === "prestamo3") {
-            if (cuotas <= 200 && cuotas > 0) {
+            if ((cuotas <= 200 && cuotas > 0) && (monto>0)) {
                 const resultado = pagoTotal(parseInt(monto), parseInt(cuotas));
                 texto.innerHTML = "Según los datos proporcionados, usted deberá pagar " + cuotas + " cuotas de " + resultado + " pesos.";
+
+                // Agregar al historial de préstamos/cotizaciones
+
+                historial.push({
+                    monto: parseInt(monto),
+                    cuotas: parseInt(cuotas),
+                    resultado
+                });
+                sessionStorage.setItem("historial", JSON.stringify(historial));
+                actualizarHistorial();
+
             } else {
-                texto.innerHTML = "El número de cuotas seleccionado debe encontrarse entre 1 y 200.";
+                texto.innerHTML = "El monto seleccionado debe ser mayor que cero y el número de cuotas debe encontrarse entre 1 y 200.";
             }
         } else {
             texto.innerHTML = "Debe seleccionar un tipo de préstamo.";
@@ -104,4 +155,6 @@ document.addEventListener("DOMContentLoaded", function () {
             texto.innerHTML = "Para acceder a un préstamo usted debe tener un usuario en el sitio web del banco, si lo tiene ingrese su documento de indentidad, en caso de no contar con usurio diríjase a la sucursal más próxima y solicite uno."
         }
     })
+
+    
 })

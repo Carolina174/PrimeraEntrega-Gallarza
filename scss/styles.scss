@@ -1,0 +1,125 @@
+/* variables */
+$color1: black;
+$color2: rgb(88, 88, 90);
+$color3: rgb(254, 254, 254);
+
+/*----código genérico----*/
+
+
+body {
+    background-color: $color1;
+    color: $color3;
+
+    /*barrra de navegación*/
+
+    .nav-link {
+        text-transform: uppercase;
+        color: $color3;
+    }
+
+    .nav-link:hover {
+        color: $color2;
+    }
+
+    .navbar-brand {
+        color: $color3;
+    }
+
+    .navbar-toggler {
+        color: $color3;
+        font-weight: 600;
+    }
+    .flex-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    /*----main----*/
+
+    .main {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.514), rgba(0, 0, 0, 0.772)), url(../images//frankfurt-2251537_1920.jpg);
+        background-position: center;
+        background-size: cover;
+        height: auto;
+        
+    
+        h1 {
+            font-size: 25px;
+            text-align: center;
+            padding: 30px;
+            padding-bottom: 0px;
+            padding-top: 50px;
+            color: $color3;
+            font-weight: normal;
+        }
+        p {
+            padding: 5px;
+            text-align: justify;
+        }
+    
+        li {
+            padding: 15px;
+            text-align: justify;
+    
+        }
+    }
+}
+
+/*-- simulador-historial y resultados--*/
+
+#historial{
+    padding-top: 20px;
+}
+
+h2{font-size: 20px;
+    margin: 0;
+    text-align: center;
+    padding: 30px;
+    padding-bottom: 0px;
+    color: $color3;
+    font-weight: normal;
+}
+
+/* --formularios--*/
+
+.cuestionario {
+    padding: 10px;
+}
+
+.campo input {
+    padding: 5px;
+    font-size: 16px;
+    color: $color3;
+    border: none;
+    border-bottom: 1px solid $color3;
+    background: transparent;
+}
+
+label {
+    font-size: 16px;
+    color: $color3;
+    padding: 5px;
+}
+
+.btn {
+    color: $color3;
+    text-transform: uppercase;
+    transition: .5s;
+    margin-top: 10px;
+    letter-spacing: 4px;
+}
+
+.btn:hover {
+    background: $color1;
+    color: $color3;
+    border-radius: 15px;
+    box-shadow: 0 0 5px $color3,
+}
+
+/* barra de navegación @media*/
+
+@media screen and (min-width:600px) {
+    body .flex-container {
+        justify-content: flex-end;
+    }
+}
